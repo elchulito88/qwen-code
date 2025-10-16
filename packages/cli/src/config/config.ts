@@ -120,6 +120,7 @@ export interface CliArgs {
   vlmSwitchMode: string | undefined;
   useSmartEdit: boolean | undefined;
   outputFormat: string | undefined;
+  provider: string | undefined;
 }
 
 export async function parseArguments(settings: Settings): Promise<CliArgs> {
@@ -341,6 +342,12 @@ export async function parseArguments(settings: Settings): Promise<CliArgs> {
           type: 'string',
           description: 'The format of the CLI output.',
           choices: ['text', 'json'],
+        })
+        .option('provider', {
+          type: 'string',
+          choices: ['auto', 'ollama', 'lmstudio', 'huggingface', 'cloud'],
+          description:
+            'Select which model provider to use. Values: auto (auto-detect), ollama (Ollama), lmstudio (LM Studio), huggingface (HuggingFace), cloud (cloud-based API). Overrides settings files.',
         })
         .deprecateOption(
           'show-memory-usage',
@@ -681,6 +688,8 @@ export async function loadCliConfig(
 
   const vlmSwitchMode =
     argv.vlmSwitchMode || settings.experimental?.vlmSwitchMode;
+  const preferredProvider =
+    argv.provider || settings.providers?.preferred;
   return new Config({
     sessionId,
     embeddingModel: DEFAULT_QWEN_EMBEDDING_MODEL,
@@ -774,6 +783,7 @@ export async function loadCliConfig(
     output: {
       format: (argv.outputFormat ?? settings.output?.format) as OutputFormat,
     },
+    preferredProvider,
   });
 }
 

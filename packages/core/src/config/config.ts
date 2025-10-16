@@ -281,6 +281,7 @@ export interface ConfigParameters {
   eventEmitter?: EventEmitter;
   useSmartEdit?: boolean;
   output?: OutputSettings;
+  preferredProvider?: string;
 }
 
 export class Config {
@@ -364,6 +365,7 @@ export class Config {
   private readonly enablePromptCompletion: boolean = false;
   private readonly skipLoopDetection: boolean;
   private readonly vlmSwitchMode: string | undefined;
+  private readonly preferredProvider: string | undefined;
   private initialized: boolean = false;
   readonly storage: Storage;
   private readonly fileExclusions: FileExclusions;
@@ -479,6 +481,7 @@ export class Config {
     this.storage = new Storage(this.targetDir);
     this.enablePromptCompletion = params.enablePromptCompletion ?? false;
     this.vlmSwitchMode = params.vlmSwitchMode;
+    this.preferredProvider = params.preferredProvider;
     this.fileExclusions = new FileExclusions(this);
     this.eventEmitter = params.eventEmitter;
     this.outputSettings = {
@@ -1057,6 +1060,10 @@ export class Config {
     return this.outputSettings?.format
       ? this.outputSettings.format
       : OutputFormat.TEXT;
+  }
+
+  getPreferredProvider(): string | undefined {
+    return this.preferredProvider;
   }
 
   async getGitService(): Promise<GitService> {
