@@ -21,9 +21,12 @@ This fork of the official Qwen CLI adds support for running Qwen models locally 
 - 🎯 **LM Studio Support**: Run models through LM Studio (SECONDARY)
 - 🤗 **HuggingFace Support**: Use HuggingFace Inference API or local TGI (TERTIARY)
 - 🔍 **Auto-Detection**: Automatically detects and selects available providers
+- 🚀 **CLI Provider Selection**: Override provider with `--provider` flag
+- 📦 **Model Management**: List and pull models with `/models` commands
 - 🔒 **Privacy First**: All inference happens locally by default
 - 🔄 **Upstream Sync**: Maintain ability to sync with official Qwen CLI updates
 - ⚙️ **Configurable**: Extensive per-provider configuration options
+- ✅ **Fully Tested**: 75+ unit tests covering all provider implementations
 
 ## Supported Providers
 
@@ -114,6 +117,9 @@ npm link
    npm run start
    # or if you've linked it globally
    qwen
+
+   # Or specify a provider directly
+   qwen --provider=ollama
    ```
 
 3. **Check available providers**:
@@ -121,7 +127,12 @@ npm link
    /providers
    ```
 
-4. **Start chatting**:
+4. **List available models**:
+   ```
+   /models list
+   ```
+
+5. **Start chatting**:
    ```
    Hello! Can you help me write a Python function?
    ```
@@ -201,6 +212,37 @@ Just start typing your questions or requests:
 What is a closure in JavaScript?
 ```
 
+### CLI Flags
+
+#### `--provider` Flag
+
+Override the default provider selection using the `--provider` flag:
+
+```bash
+# Use Ollama specifically
+qwen --provider=ollama
+
+# Use LM Studio
+qwen --provider=lmstudio
+
+# Use HuggingFace
+qwen --provider=huggingface
+
+# Auto-detect (default behavior)
+qwen --provider=auto
+
+# Use cloud providers
+qwen --provider=cloud
+```
+
+This flag overrides the `providers.preferred` setting from your configuration file.
+
+**Use cases:**
+- Testing different providers quickly
+- Forcing a specific provider when auto-detection fails
+- Switching between local and cloud providers
+- CI/CD pipelines with specific provider requirements
+
 ### Using Slash Commands
 
 The CLI includes various slash commands for configuration and control:
@@ -208,7 +250,8 @@ The CLI includes various slash commands for configuration and control:
 ```
 /help          - Show available commands
 /providers     - List available local providers
-/models        - List available models
+/models list   - List all available models
+/models pull   - Pull/download a model (Ollama)
 /settings      - Configure settings
 /clear         - Clear conversation history
 /quit          - Exit the CLI
@@ -258,13 +301,57 @@ List all available providers and their status.
 /providers
 ```
 
-### `/models` (Coming Soon)
+### `/models list`
 
-List available models from the active provider.
+List all available models from detected providers with details:
 
 ```
 /models list
+```
+
+Output example:
+```
+**Available Models**
+
+🦙 **ollama**
+   Endpoint: http://localhost:11434
+   Models (3):
+   - qwen2.5-coder:7b [stream]
+   - qwen2.5-coder:14b [stream]
+   - llava:7b [vision] [stream]
+
+🎯 **lmstudio**
+   Endpoint: http://127.0.0.1:1234
+   Models (2):
+   - qwen3-coder-30b [stream] (262144 tokens)
+   - qwen2.5-coder-14b [stream] (262144 tokens)
+```
+
+### `/models pull`
+
+Pull/download a model from Ollama (Ollama only):
+
+```
 /models pull qwen2.5-coder:7b
+```
+
+Features:
+- Real-time progress updates
+- Shows download percentage
+- Error handling with helpful messages
+- Automatically validates model availability after download
+
+Example output:
+```
+🔄 Pulling model "qwen2.5-coder:7b" from Ollama...
+
+This may take several minutes depending on the model size.
+
+pulling manifest
+downloading digestname: 100%
+✅ Successfully pulled model "qwen2.5-coder:7b"!
+
+You can now use it with: qwen --model=qwen2.5-coder:7b
 ```
 
 ### Configuration Commands
