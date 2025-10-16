@@ -170,7 +170,7 @@ export class OllamaProvider implements ModelProvider {
     contents: Content[],
   ): Array<{ role: string; content: string }> {
     return contents.map((content) => ({
-      role: content.role === 'model' ? 'assistant' : content.role,
+      role: content.role === 'model' ? 'assistant' : (content.role || 'user'),
       content: this.extractTextFromParts(content.parts || []),
     }));
   }
@@ -179,9 +179,9 @@ export class OllamaProvider implements ModelProvider {
     return parts
       .map((part) => {
         if ('text' in part) return part.text;
-        if ('functionCall' in part)
+        if ('functionCall' in part && part.functionCall)
           return `[Function Call: ${part.functionCall.name}]`;
-        if ('functionResponse' in part)
+        if ('functionResponse' in part && part.functionResponse)
           return `[Function Response: ${part.functionResponse.name}]`;
         return '';
       })
@@ -206,7 +206,7 @@ export class OllamaProvider implements ModelProvider {
           index: 0,
         },
       ],
-    } as GenerateContentResponse;
+    } as unknown as GenerateContentResponse;
   }
 
   private convertStreamChunkToGeminiResponse(data: {
@@ -227,6 +227,6 @@ export class OllamaProvider implements ModelProvider {
           index: 0,
         },
       ],
-    } as GenerateContentResponse;
+    } as unknown as GenerateContentResponse;
   }
 }

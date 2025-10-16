@@ -68,7 +68,7 @@ export const providersCommand: SlashCommand = {
 
     context.ui.addItem(
       {
-        type: MessageType.TEXT,
+        type: MessageType.INFO,
         text: '🔍 Detecting available providers...\n',
       },
       Date.now(),
@@ -145,7 +145,7 @@ export const providersCommand: SlashCommand = {
 
     context.ui.addItem(
       {
-        type: MessageType.TEXT,
+        type: MessageType.INFO,
         text: output,
       },
       Date.now(),

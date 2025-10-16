@@ -116,6 +116,7 @@ export interface CliArgs {
   tavilyApiKey: string | undefined;
   screenReader: boolean | undefined;
   vlmSwitchMode: string | undefined;
+  provider: string | undefined;
 }
 
 export async function parseArguments(settings: Settings): Promise<CliArgs> {
@@ -289,6 +290,12 @@ export async function parseArguments(settings: Settings): Promise<CliArgs> {
           description:
             'Default behavior when images are detected in input. Values: once (one-time switch), session (switch for entire session), persist (continue with current model). Overrides settings files.',
           default: process.env['VLM_SWITCH_MODE'],
+        })
+        .option('provider', {
+          type: 'string',
+          choices: ['auto', 'ollama', 'lmstudio', 'huggingface', 'cloud'],
+          description:
+            'Select which model provider to use. Values: auto (auto-detect), ollama (Ollama), lmstudio (LM Studio), huggingface (HuggingFace), cloud (cloud-based API). Overrides settings files.',
         })
         .check((argv) => {
           if (argv.prompt && argv['promptInteractive']) {
@@ -560,6 +567,8 @@ export async function loadCliConfig(
 
   const vlmSwitchMode =
     argv.vlmSwitchMode || settings.experimental?.vlmSwitchMode;
+  const preferredProvider =
+    argv.provider || settings.providers?.preferred;
   return new Config({
     sessionId,
     embeddingModel: DEFAULT_GEMINI_EMBEDDING_MODEL,
@@ -667,6 +676,7 @@ export async function loadCliConfig(
     enablePromptCompletion: settings.general?.enablePromptCompletion ?? false,
     skipLoopDetection: settings.skipLoopDetection ?? false,
     vlmSwitchMode,
+    preferredProvider,
   });
 }
 
