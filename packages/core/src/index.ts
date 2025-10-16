@@ -127,3 +127,6 @@ export { Storage } from './config/storage.js';
 
 // Export test utils
 export * from './test-utils/index.js';
+
+// Export local providers
+export * from './providers/index.js';
