@@ -29,9 +29,25 @@ Qwen Code is a powerful command-line AI workflow tool adapted from [**Gemini CLI
 
 ## 💡 Free Options Available
 
-Get started with Qwen Code at no cost using any of these free options:
+Get started with Qwen Code at no cost using any of these options:
 
-### 🔥 Qwen OAuth (Recommended)
+### 🦙 Local Models (🔒 Privacy-First, Recommended for Local Development)
+
+Run Qwen models completely locally with zero API costs and full privacy:
+
+- **Ollama**: Easiest local setup - `ollama pull qwen2.5-coder:7b` and you're ready
+- **LM Studio**: User-friendly GUI for local models
+- **HuggingFace**: Use Inference API or run local Text Generation Inference server
+
+**Benefits:**
+- ✅ **100% Private** - All inference happens locally, no data leaves your machine
+- ✅ **Zero Cost** - No API fees, no rate limits
+- ✅ **Offline Support** - Works without internet connection
+- ✅ **Full Control** - Choose your model size and quantization
+
+See [Local Provider Setup](#-local-provider-setup) for installation guide.
+
+### 🔥 Qwen OAuth (Cloud, Recommended for Remote Work)
 
 - **2,000 requests per day** with no token limits
 - **60 requests per minute** rate limit
@@ -275,6 +291,93 @@ export OPENAI_MODEL="qwen/qwen3-coder:free"
 ```
 
 </details>
+
+## 🦙 Local Provider Setup
+
+This fork includes support for running Qwen models locally through Ollama, LM Studio, or HuggingFace. Perfect for privacy-conscious users or offline development.
+
+### Quick Start with Ollama (Recommended)
+
+**1. Install Ollama:**
+```bash
+# macOS
+brew install ollama
+
+# Linux
+curl -fsSL https://ollama.ai/install.sh | sh
+```
+
+**2. Pull a Qwen model:**
+```bash
+ollama pull qwen2.5-coder:7b     # 7B model (8GB+ RAM)
+ollama pull qwen2.5-coder:14b    # 14B model (16GB+ RAM)
+ollama pull qwen2.5-coder:32b    # 32B model (32GB+ RAM)
+```
+
+**3. Start using Qwen Code:**
+```bash
+qwen
+
+# Check available providers
+/providers
+
+# Start chatting
+> Help me write a Python function
+```
+
+### Alternative: LM Studio
+
+1. Download from https://lmstudio.ai
+2. Open LM Studio and download a Qwen model
+3. Start the local server (click server icon)
+4. Run `qwen` - it will auto-detect LM Studio
+
+### Alternative: HuggingFace
+
+**Option A - Inference API:**
+```bash
+export HF_API_KEY="your-api-key"
+qwen
+```
+
+**Option B - Local TGI Server:**
+```bash
+docker run -p 8080:80 \
+  ghcr.io/huggingface/text-generation-inference:latest \
+  --model-id Qwen/Qwen2.5-Coder-7B-Instruct
+```
+
+### Configuration
+
+Create or edit `.qwen/settings.json`:
+
+```json
+{
+  "providers": {
+    "preferred": "auto",
+    "ollama": {
+      "enabled": true,
+      "endpoint": "http://localhost:11434",
+      "defaultModel": "qwen2.5-coder:7b"
+    },
+    "lmstudio": {
+      "enabled": true,
+      "endpoint": "http://127.0.0.1:1234",
+      "defaultModel": "qwen2.5-coder-14b"
+    }
+  }
+}
+```
+
+### Provider Commands
+
+```bash
+/providers        # List available providers and their models
+/models list      # List models from active provider (coming soon)
+/models pull      # Download a model (coming soon)
+```
+
+**For complete documentation**, see [LOCAL_PROVIDERS.md](./LOCAL_PROVIDERS.md)
 
 ## Usage Examples
 
