@@ -496,14 +496,23 @@ This fork prioritizes privacy and local execution:
 
 ## Contributing
 
-Contributions are welcome! Please:
+Contributions are welcome! Please follow the development workflow documented in [DEVELOPMENT.md](./DEVELOPMENT.md).
+
+**⚠️ IMPORTANT: All changes must be made on a feature branch. Never commit directly to `main`.**
+
+### Quick Start for Contributors
 
 1. Fork this repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/qwen-code.git`
+3. Create a feature branch: `git checkout -b feature/your-feature-name`
+4. Make your changes and add tests
 5. Update documentation
-6. Submit a pull request
+6. Verify: `npm test && npm run build`
+7. Commit with clear message
+8. Push your branch: `git push origin feature/your-feature-name`
+9. Merge to main after verification
+
+See [DEVELOPMENT.md](./DEVELOPMENT.md) for detailed workflow, branch naming conventions, and examples.
 
 ### Development Setup
 

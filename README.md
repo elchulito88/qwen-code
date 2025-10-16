@@ -502,9 +502,11 @@ qwen
 
 ## Development & Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) to learn how to contribute to the project.
+**⚠️ Important for Contributors:** All changes must be made on feature branches. See [DEVELOPMENT.md](./DEVELOPMENT.md) for the mandatory branch workflow.
 
-For detailed authentication setup, see the [authentication guide](./docs/cli/authentication.md).
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Development workflow and branch management (required reading)
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - How to contribute to the project
+- **[Authentication Guide](./docs/cli/authentication.md)** - Detailed authentication setup
 
 ## Troubleshooting
 
