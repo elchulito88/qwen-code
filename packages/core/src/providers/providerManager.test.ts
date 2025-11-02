@@ -23,9 +23,9 @@ describe('ProviderManager', () => {
     it('should initialize with auto detection by default', () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: true },
       };
 
@@ -36,9 +36,9 @@ describe('ProviderManager', () => {
     it('should initialize with specific provider preference', () => {
       const config: ProviderConfig = {
         preferred: 'ollama',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: false },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: false, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: false },
       };
 
@@ -51,9 +51,9 @@ describe('ProviderManager', () => {
     it('should detect all available providers', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: true },
       };
 
@@ -96,9 +96,9 @@ describe('ProviderManager', () => {
     it('should mark unavailable providers correctly', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: true },
       };
 
@@ -126,9 +126,9 @@ describe('ProviderManager', () => {
     it('should skip disabled providers', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: false },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: false, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: false },
       };
 
@@ -148,9 +148,9 @@ describe('ProviderManager', () => {
     it('should include endpoint information', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://custom:11434' },
-        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: false },
+        ollama: { enabled: true, endpoint: 'http://custom:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: false, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: false },
       };
 
@@ -168,9 +168,9 @@ describe('ProviderManager', () => {
     it('should include model lists when providers are available', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: false },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: false, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: false },
       };
 
@@ -197,9 +197,9 @@ describe('ProviderManager', () => {
     it('should return first available provider in priority order', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: true },
       };
 
@@ -224,9 +224,9 @@ describe('ProviderManager', () => {
     it('should respect priority order: ollama > lmstudio > huggingface', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: true },
       };
 
@@ -258,9 +258,9 @@ describe('ProviderManager', () => {
     it('should return null when no providers are available', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: true },
       };
 
@@ -277,9 +277,9 @@ describe('ProviderManager', () => {
     it('should return specific provider when preferred is set', async () => {
       const config: ProviderConfig = {
         preferred: 'lmstudio',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: true },
       };
 
@@ -302,9 +302,9 @@ describe('ProviderManager', () => {
     it('should auto-detect when preferred is "auto"', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: true },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: true, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: false },
       };
 
@@ -327,9 +327,9 @@ describe('ProviderManager', () => {
     it('should return null if preferred provider is not available', async () => {
       const config: ProviderConfig = {
         preferred: 'ollama',
-        ollama: { enabled: true, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234' },
-        huggingface: { enabled: false },
+        ollama: { enabled: true, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: false, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: false },
       };
 
@@ -346,9 +346,9 @@ describe('ProviderManager', () => {
     it('should use custom endpoints from config', async () => {
       const config: ProviderConfig = {
         preferred: 'auto',
-        ollama: { enabled: true, endpoint: 'http://custom-ollama:9999' },
-        lmstudio: { enabled: true, endpoint: 'http://custom-lms:8888' },
-        huggingface: { enabled: false },
+        ollama: { enabled: true, endpoint: 'http://custom-ollama:9999', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: true, endpoint: 'http://custom-lms:8888', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
+        huggingface: { enabled: false, defaultModel: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
         cloud: { enabled: false },
       };
 
@@ -382,6 +382,7 @@ describe('ProviderManager', () => {
           enabled: true,
           endpoint: 'http://127.0.0.1:1234',
           defaultModel: 'qwen3-coder-70b',
+          contextWindow: 32768,
         },
         huggingface: {
           enabled: true,
@@ -397,8 +398,8 @@ describe('ProviderManager', () => {
     it('should handle HuggingFace API key from config', async () => {
       const config: ProviderConfig = {
         preferred: 'huggingface',
-        ollama: { enabled: false, endpoint: 'http://localhost:11434' },
-        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234' },
+        ollama: { enabled: false, endpoint: 'http://localhost:11434', defaultModel: 'qwen2.5-coder:7b' },
+        lmstudio: { enabled: false, endpoint: 'http://127.0.0.1:1234', defaultModel: 'qwen3-coder-30b', contextWindow: 32768 },
         huggingface: {
           enabled: true,
           apiKey: 'test-hf-key',

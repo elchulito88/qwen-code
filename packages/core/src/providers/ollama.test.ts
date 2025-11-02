@@ -148,7 +148,7 @@ describe('OllamaProvider', () => {
       });
 
       expect(result.candidates).toHaveLength(1);
-      expect(result.candidates?.[0]?.content.parts[0]).toEqual({
+      expect(result.candidates![0]!.content.parts[0]).toEqual({
         text: 'I am doing well, thank you!',
       });
       expect(result.candidates?.[0]?.finishReason).toBe(1); // STOP

@@ -169,7 +169,7 @@ describe('LMStudioProvider', () => {
       });
 
       expect(result.candidates).toHaveLength(1);
-      expect(result.candidates?.[0]?.content.parts[0]).toEqual({
+      expect(result.candidates![0]!.content.parts[0]).toEqual({
         text: 'function add(a, b) { return a + b; }',
       });
       expect(result.candidates?.[0]?.finishReason).toBe(1); // STOP
@@ -261,7 +261,7 @@ describe('LMStudioProvider', () => {
       });
 
       const result = await provider.sendRequest(contents, {});
-      expect(result.candidates?.[0]?.content.parts[0]).toEqual({ text: '' });
+      expect(result.candidates![0]!.content.parts[0]).toEqual({ text: '' });
     });
   });
 
