@@ -18,6 +18,7 @@ export class OllamaProvider implements ModelProvider {
 
   constructor(
     private endpoint: string = 'http://localhost:11434',
+    private defaultModel: string = 'qwen2.5-coder:14b',
   ) {}
 
   async isAvailable(): Promise<boolean> {
@@ -73,7 +74,7 @@ export class OllamaProvider implements ModelProvider {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'qwen2.5-coder:7b', // Default model, should be configurable
+        model: this.defaultModel,
         messages,
         temperature: options.temperature ?? 0.7,
         max_tokens: options.maxTokens,
@@ -112,7 +113,7 @@ export class OllamaProvider implements ModelProvider {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'qwen2.5-coder:7b',
+        model: this.defaultModel,
         messages,
         temperature: options.temperature ?? 0.7,
         max_tokens: options.maxTokens,

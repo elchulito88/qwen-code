@@ -51,6 +51,7 @@ export class ProviderManager {
     if (this.config.ollama?.enabled !== false) {
       const ollamaProvider = new OllamaProvider(
         this.config.ollama?.endpoint || 'http://localhost:11434',
+        this.config.ollama?.defaultModel || 'qwen2.5-coder:14b',
       );
       this.providers.set('ollama', ollamaProvider);
     }
@@ -68,7 +69,7 @@ export class ProviderManager {
     if (this.config.huggingface?.enabled !== false) {
       const hfProvider = new HuggingFaceProvider(
         this.config.huggingface?.apiKey,
-        this.config.huggingface?.defaultModel || 'Qwen/Qwen2.5-Coder-7B-Instruct',
+        this.config.huggingface?.defaultModel || 'Qwen/Qwen2.5-Coder-14B-Instruct',
       );
       this.providers.set('huggingface', hfProvider);
     }

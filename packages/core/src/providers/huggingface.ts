@@ -20,7 +20,7 @@ export class HuggingFaceProvider implements ModelProvider {
 
   constructor(
     private apiKey?: string,
-    private defaultModel: string = 'Qwen/Qwen2.5-Coder-7B-Instruct',
+    private defaultModel: string = 'Qwen/Qwen2.5-Coder-14B-Instruct',
   ) {}
 
   async isAvailable(): Promise<boolean> {
@@ -43,6 +43,7 @@ export class HuggingFaceProvider implements ModelProvider {
   async listModels(): Promise<Model[]> {
     // Return a predefined list of Qwen models available on HuggingFace
     return [
+      // Qwen2.5-Coder models
       {
         id: 'Qwen/Qwen2.5-Coder-7B-Instruct',
         name: 'Qwen2.5-Coder-7B-Instruct',
@@ -61,6 +62,14 @@ export class HuggingFaceProvider implements ModelProvider {
         id: 'Qwen/Qwen2.5-Coder-32B-Instruct',
         name: 'Qwen2.5-Coder-32B-Instruct',
         contextWindow: 32768,
+        supportsStreaming: false,
+        supportsVision: false,
+      },
+      // Qwen3-Coder models
+      {
+        id: 'Qwen/Qwen3-Coder-30B-A3B-Instruct',
+        name: 'Qwen3-Coder-30B-A3B-Instruct',
+        contextWindow: 131072,
         supportsStreaming: false,
         supportsVision: false,
       },

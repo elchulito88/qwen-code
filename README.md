@@ -86,9 +86,13 @@ curl -fsSL https://ollama.ai/install.sh | sh
 
 **2. Pull a Qwen model:**
 ```bash
+# Qwen2.5-Coder models (Recommended)
 ollama pull qwen2.5-coder:7b     # 7B model (8GB+ RAM)
-ollama pull qwen2.5-coder:14b    # 14B model (16GB+ RAM)
+ollama pull qwen2.5-coder:14b    # 14B model (16GB+ RAM) - Default
 ollama pull qwen2.5-coder:32b    # 32B model (32GB+ RAM)
+
+# Qwen3-Coder models (Latest)
+ollama pull qwen3-coder:30b      # 30B model (32GB+ RAM)
 ```
 
 **3. Start using Qwen Code:**
@@ -112,9 +116,15 @@ qwen
 ### Alternative: HuggingFace Local TGI
 
 ```bash
+# Default (Qwen2.5-Coder-14B)
 docker run -p 8080:80 \
   ghcr.io/huggingface/text-generation-inference:latest \
-  --model-id Qwen/Qwen2.5-Coder-7B-Instruct
+  --model-id Qwen/Qwen2.5-Coder-14B-Instruct
+
+# Or use Qwen3-Coder-30B
+docker run -p 8080:80 \
+  ghcr.io/huggingface/text-generation-inference:latest \
+  --model-id Qwen/Qwen3-Coder-30B-A3B-Instruct
 ```
 
 ### Configuration
@@ -128,12 +138,30 @@ Create or edit `.qwen/settings.json` in your home directory:
     "ollama": {
       "enabled": true,
       "endpoint": "http://localhost:11434",
-      "defaultModel": "qwen2.5-coder:7b"
+      "defaultModel": "qwen2.5-coder:14b"
     },
     "lmstudio": {
       "enabled": true,
       "endpoint": "http://127.0.0.1:1234",
       "defaultModel": "qwen2.5-coder-14b"
+    },
+    "huggingface": {
+      "enabled": true,
+      "defaultModel": "Qwen/Qwen2.5-Coder-14B-Instruct"
+    }
+  }
+}
+```
+
+**Example with Qwen3:**
+```json
+{
+  "providers": {
+    "ollama": {
+      "defaultModel": "qwen3-coder:30b"
+    },
+    "huggingface": {
+      "defaultModel": "Qwen/Qwen3-Coder-30B-A3B-Instruct"
     }
   }
 }
