@@ -14,7 +14,7 @@
 
 </div>
 
-Qwen Code Local Edition is a powerful command-line AI workflow tool adapted from [**Gemini CLI**](https://github.com/google-gemini/gemini-cli) ([details](./README.gemini.md)), specifically optimized for running [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) models **completely locally**. It enhances your development workflow with advanced code understanding, automated tasks, and intelligent assistance - all while keeping your code private on your machine.
+Qwen Code Local Edition is a privacy-focused fork of [**Qwen Code**](https://github.com/QwenLM/qwen-code) by QwenLM, which itself is adapted from [**Gemini CLI**](https://github.com/google-gemini/gemini-cli) ([details](./README.gemini.md)). This fork is specifically optimized for running [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) models **completely locally** with enhanced privacy features. It enhances your development workflow with advanced code understanding, automated tasks, and intelligent assistance - all while keeping your code private on your machine.
 
 ## 💡 100% Local & Private
 
@@ -52,7 +52,7 @@ Ensure you have [Node.js version 20](https://nodejs.org/en/download) or higher i
 curl -qL https://www.npmjs.com/install.sh | sh
 ```
 
-### Install from source
+### Install from Source (Recommended)
 
 ```bash
 git clone https://github.com/elchulito88/qwen-code.git
@@ -61,11 +61,13 @@ npm install
 npm install -g .
 ```
 
-### Install globally with Homebrew (macOS/Linux)
+### Install from npm
 
 ```bash
-brew install qwen-code
+npm install -g @qwen-code/qwen-code
 ```
+
+> **Note**: This is a fork of the original Qwen Code. The command `brew install qwen-code` installs the upstream [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code), not this privacy-focused fork.
 
 ## 🦙 Local Provider Setup
 
@@ -398,10 +400,17 @@ ollama pull qwen2.5-coder:7b
 
 ## Acknowledgments
 
-This project is based on [Google Gemini CLI](https://github.com/google-gemini/gemini-cli). We acknowledge and appreciate the excellent work of the Gemini CLI team. Our main contributions focus on:
-- Parser-level adaptations to better support Qwen-Coder models
-- Complete local provider support for privacy-focused development
-- Removal of cloud dependencies for 100% offline operation
+This project is a privacy-focused fork of [**Qwen Code**](https://github.com/QwenLM/qwen-code) by QwenLM, which itself is based on [**Google Gemini CLI**](https://github.com/google-gemini/gemini-cli).
+
+We acknowledge and deeply appreciate:
+- **QwenLM Team** for creating Qwen Code and optimizing it for Qwen models
+- **Google Gemini CLI Team** for the original foundation and excellent architecture
+
+**This fork's contributions** focus on:
+- Enhanced privacy features and 100% local operation
+- Complete local provider support (Ollama, LM Studio, HuggingFace)
+- Removal of all cloud dependencies for offline development
+- Privacy-first workflow optimizations
 
 ## License
 
