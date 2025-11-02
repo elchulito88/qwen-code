@@ -25,6 +25,7 @@ export interface RequestOptions {
   maxTokens?: number;
   stream?: boolean;
   signal?: AbortSignal;
+  tools?: import('@google/genai').ToolListUnion;
 }
 
 /**

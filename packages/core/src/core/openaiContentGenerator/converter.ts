@@ -528,14 +528,27 @@ export class OpenAIContentConverter {
 
     const parts: Part[] = [];
 
+    // Ollama workaround: Check if tool call is in content as text (Ollama limitation)
+    let toolCalls = choice.message.tool_calls;
+    let textContent = choice.message.content;
+
+    if (textContent && !toolCalls) {
+      const parsedToolCall = this.parseToolCallFromText(textContent);
+      if (parsedToolCall) {
+        // Found a tool call in text format - convert it to proper tool_calls
+        toolCalls = [parsedToolCall];
+        textContent = null; // Clear content since we're using tool_calls
+      }
+    }
+
     // Handle text content
-    if (choice.message.content) {
-      parts.push({ text: choice.message.content });
+    if (textContent) {
+      parts.push({ text: textContent });
     }
 
     // Handle tool calls
-    if (choice.message.tool_calls) {
-      for (const toolCall of choice.message.tool_calls) {
+    if (toolCalls) {
+      for (const toolCall of toolCalls) {
         if (toolCall.function) {
           let args: Record<string, unknown> = {};
           if (toolCall.function.arguments) {
@@ -807,6 +820,78 @@ export class OpenAIContentConverter {
     }
 
     return openaiResponse;
+  }
+
+  /**
+   * Ollama workaround: Parse tool call from text content
+   * Ollama currently returns tool calls as JSON text instead of proper tool_calls field
+   */
+  private parseToolCallFromText(
+    content: string,
+  ): OpenAI.Chat.ChatCompletionMessageToolCall | null {
+    try {
+      // Try to parse JSON from content
+      const trimmed = content.trim();
+
+      // Check if it looks like a JSON tool call
+      if (
+        (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+        (trimmed.startsWith('```json') && trimmed.includes('```'))
+      ) {
+        // Extract JSON from code blocks if present
+        let jsonStr = trimmed;
+        const jsonMatch = trimmed.match(/```json\s*\n([\s\S]*?)\n```/);
+        if (jsonMatch) {
+          jsonStr = jsonMatch[1];
+        }
+
+        const parsed = safeJsonParse(jsonStr, null);
+
+        // Check if it has the tool call structure
+        if (parsed && parsed.name && parsed.arguments) {
+          // Ollama tool name mapping: fix common mismatches
+          const nameMapping: Record<string, string> = {
+            file_write: 'write_file',
+            file_read: 'read_file',
+            shell_command: 'run_shell_command',
+            grep: 'grep_search',
+          };
+
+          const toolName = nameMapping[parsed.name] || parsed.name;
+
+          // Ollama parameter name mapping: fix parameter mismatches
+          let mappedArgs = parsed.arguments;
+          if (
+            toolName === 'write_file' &&
+            mappedArgs.path &&
+            !mappedArgs.file_path
+          ) {
+            mappedArgs = { ...mappedArgs, file_path: mappedArgs.path };
+            delete mappedArgs.path;
+          }
+          if (
+            toolName === 'read_file' &&
+            mappedArgs.path &&
+            !mappedArgs.file_path
+          ) {
+            mappedArgs = { ...mappedArgs, file_path: mappedArgs.path };
+            delete mappedArgs.path;
+          }
+
+          return {
+            id: `call_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+            type: 'function',
+            function: {
+              name: toolName,
+              arguments: JSON.stringify(mappedArgs),
+            },
+          };
+        }
+      }
+    } catch {
+      // Not a valid JSON tool call, return null
+    }
+    return null;
   }
 
   /**
