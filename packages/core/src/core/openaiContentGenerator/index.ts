@@ -11,9 +11,6 @@ import type {
 import type { Config } from '../../config/config.js';
 import { OpenAIContentGenerator } from './openaiContentGenerator.js';
 import {
-  DashScopeOpenAICompatibleProvider,
-  DeepSeekOpenAICompatibleProvider,
-  OpenRouterOpenAICompatibleProvider,
   type OpenAICompatibleProvider,
   DefaultOpenAICompatibleProvider,
 } from './provider/index.js';
@@ -23,9 +20,6 @@ export { ContentGenerationPipeline, type PipelineConfig } from './pipeline.js';
 
 export {
   type OpenAICompatibleProvider,
-  DashScopeOpenAICompatibleProvider,
-  DeepSeekOpenAICompatibleProvider,
-  OpenRouterOpenAICompatibleProvider,
 } from './provider/index.js';
 
 export { OpenAIContentConverter } from './converter.js';
@@ -47,38 +41,13 @@ export function createOpenAIContentGenerator(
 
 /**
  * Determine the appropriate provider based on configuration
+ * Cloud providers (DashScope, DeepSeek, OpenRouter) removed - use local providers instead
  */
 export function determineProvider(
   contentGeneratorConfig: ContentGeneratorConfig,
   cliConfig: Config,
 ): OpenAICompatibleProvider {
-  const config =
-    contentGeneratorConfig || cliConfig.getContentGeneratorConfig();
-
-  // Check for DashScope provider
-  if (DashScopeOpenAICompatibleProvider.isDashScopeProvider(config)) {
-    return new DashScopeOpenAICompatibleProvider(
-      contentGeneratorConfig,
-      cliConfig,
-    );
-  }
-
-  if (DeepSeekOpenAICompatibleProvider.isDeepSeekProvider(config)) {
-    return new DeepSeekOpenAICompatibleProvider(
-      contentGeneratorConfig,
-      cliConfig,
-    );
-  }
-
-  // Check for OpenRouter provider
-  if (OpenRouterOpenAICompatibleProvider.isOpenRouterProvider(config)) {
-    return new OpenRouterOpenAICompatibleProvider(
-      contentGeneratorConfig,
-      cliConfig,
-    );
-  }
-
-  // Default provider for standard OpenAI-compatible APIs
+  // Default provider for standard OpenAI-compatible APIs (including local providers)
   return new DefaultOpenAICompatibleProvider(contentGeneratorConfig, cliConfig);
 }
 

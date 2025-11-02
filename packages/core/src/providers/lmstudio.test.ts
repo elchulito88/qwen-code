@@ -385,7 +385,7 @@ describe('LMStudioProvider', () => {
 
   describe('endpoint configuration', () => {
     it('should use default endpoint when not specified', () => {
-      const _defaultProvider = new LMStudioProvider();
+      new LMStudioProvider();
       expect(fetchMock).toBeDefined();
     });
 

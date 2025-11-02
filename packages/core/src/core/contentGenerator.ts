@@ -13,7 +13,7 @@ import type {
   GenerateContentResponse,
 } from '@google/genai';
 import { GoogleGenAI } from '@google/genai';
-import { createCodeAssistContentGenerator } from '../code_assist/codeAssist.js';
+// import { createCodeAssistContentGenerator } from '../code_assist/codeAssist.js'; // Removed - cloud-only feature
 import { DEFAULT_QWEN_MODEL } from '../config/models.js';
 import type { Config } from '../config/config.js';
 
@@ -126,21 +126,22 @@ export async function createContentGenerator(
     'User-Agent': userAgent,
   };
 
-  if (
-    config.authType === AuthType.LOGIN_WITH_GOOGLE ||
-    config.authType === AuthType.CLOUD_SHELL
-  ) {
-    const httpOptions = { headers: baseHeaders };
-    return new LoggingContentGenerator(
-      await createCodeAssistContentGenerator(
-        httpOptions,
-        config.authType,
-        gcConfig,
-        sessionId,
-      ),
-      gcConfig,
-    );
-  }
+  // Removed cloud-only Google Code Assist authentication
+  // if (
+  //   config.authType === AuthType.LOGIN_WITH_GOOGLE ||
+  //   config.authType === AuthType.CLOUD_SHELL
+  // ) {
+  //   const httpOptions = { headers: baseHeaders };
+  //   return new LoggingContentGenerator(
+  //     await createCodeAssistContentGenerator(
+  //       httpOptions,
+  //       config.authType,
+  //       gcConfig,
+  //       sessionId,
+  //     ),
+  //     gcConfig,
+  //   );
+  // }
 
   if (
     config.authType === AuthType.USE_GEMINI ||
@@ -179,27 +180,28 @@ export async function createContentGenerator(
     return createOpenAIContentGenerator(config, gcConfig);
   }
 
-  if (config.authType === AuthType.QWEN_OAUTH) {
-    // Import required classes dynamically
-    const { getQwenOAuthClient: getQwenOauthClient } = await import(
-      '../qwen/qwenOAuth2.js'
-    );
-    const { QwenContentGenerator } = await import(
-      '../qwen/qwenContentGenerator.js'
-    );
-
-    try {
-      // Get the Qwen OAuth client (now includes integrated token management)
-      const qwenClient = await getQwenOauthClient(gcConfig);
-
-      // Create the content generator with dynamic token management
-      return new QwenContentGenerator(qwenClient, config, gcConfig);
-    } catch (error) {
-      throw new Error(
-        `Failed to initialize Qwen: ${error instanceof Error ? error.message : String(error)}`,
-      );
-    }
-  }
+  // Removed cloud-only Qwen OAuth authentication - use local providers instead
+  // if (config.authType === AuthType.QWEN_OAUTH) {
+  //   // Import required classes dynamically
+  //   const { getQwenOAuthClient: getQwenOauthClient } = await import(
+  //     '../qwen/qwenOAuth2.js'
+  //   );
+  //   const { QwenContentGenerator } = await import(
+  //     '../qwen/qwenContentGenerator.js'
+  //   );
+  //
+  //   try {
+  //     // Get the Qwen OAuth client (now includes integrated token management)
+  //     const qwenClient = await getQwenOauthClient(gcConfig);
+  //
+  //     // Create the content generator with dynamic token management
+  //     return new QwenContentGenerator(qwenClient, config, gcConfig);
+  //   } catch (error) {
+  //     throw new Error(
+  //       `Failed to initialize Qwen: ${error instanceof Error ? error.message : String(error)}`,
+  //     );
+  //   }
+  // }
 
   throw new Error(
     `Error creating contentGenerator: Unsupported authType: ${config.authType}`,

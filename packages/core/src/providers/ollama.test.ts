@@ -357,7 +357,7 @@ describe('OllamaProvider', () => {
 
   describe('endpoint configuration', () => {
     it('should use default endpoint when not specified', () => {
-      const _defaultProvider = new OllamaProvider();
+      new OllamaProvider();
       expect(fetchMock).toBeDefined();
       // Endpoint is private, but we can verify through isAvailable call
     });

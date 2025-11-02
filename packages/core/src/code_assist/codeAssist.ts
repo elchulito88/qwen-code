@@ -6,7 +6,7 @@
 
 import type { ContentGenerator } from '../core/contentGenerator.js';
 import { AuthType } from '../core/contentGenerator.js';
-import { getOauthClient } from './oauth2.js';
+// import { getOauthClient } from './oauth2.js'; // Removed - cloud-only feature
 import { setupUser } from './setup.js';
 import type { HttpOptions } from './server.js';
 import { CodeAssistServer } from './server.js';
@@ -19,22 +19,23 @@ export async function createCodeAssistContentGenerator(
   config: Config,
   sessionId?: string,
 ): Promise<ContentGenerator> {
-  if (
-    authType === AuthType.LOGIN_WITH_GOOGLE ||
-    authType === AuthType.CLOUD_SHELL
-  ) {
-    const authClient = await getOauthClient(authType, config);
-    const userData = await setupUser(authClient);
-    return new CodeAssistServer(
-      authClient,
-      userData.projectId,
-      httpOptions,
-      sessionId,
-      userData.userTier,
-    );
-  }
+  // Removed cloud-only Google Code Assist authentication
+  // if (
+  //   authType === AuthType.LOGIN_WITH_GOOGLE ||
+  //   authType === AuthType.CLOUD_SHELL
+  // ) {
+  //   const authClient = await getOauthClient(authType, config);
+  //   const userData = await setupUser(authClient);
+  //   return new CodeAssistServer(
+  //     authClient,
+  //     userData.projectId,
+  //     httpOptions,
+  //     sessionId,
+  //     userData.userTier,
+  //   );
+  // }
 
-  throw new Error(`Unsupported authType: ${authType}`);
+  throw new Error(`Google Code Assist not supported - use local providers instead. Unsupported authType: ${authType}`);
 }
 
 export function getCodeAssistServer(

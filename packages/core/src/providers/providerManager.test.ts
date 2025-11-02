@@ -5,8 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { ProviderManager } from './providerManager.js';
-import type { ProviderConfig } from './base.js';
+import { ProviderManager, type ProviderConfig } from './providerManager.js';
 
 describe('ProviderManager', () => {
   let fetchMock: ReturnType<typeof vi.fn>;
