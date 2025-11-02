@@ -33,7 +33,6 @@ import { getCliVersion } from './utils/version.js';
 import type { Config } from '@qwen-code/qwen-code-core';
 import {
   AuthType,
-  getOauthClient,
   logUserPrompt,
 } from '@qwen-code/qwen-code-core';
 import {
@@ -371,14 +370,14 @@ export async function main() {
 
     const initializationResult = await initializeApp(config, settings);
 
-    if (
-      settings.merged.security?.auth?.selectedType ===
-        AuthType.LOGIN_WITH_GOOGLE &&
-      config.isBrowserLaunchSuppressed()
-    ) {
-      // Do oauth before app renders to make copying the link possible.
-      await getOauthClient(settings.merged.security.auth.selectedType, config);
-    }
+    // Cloud authentication removed - using local providers only
+    // if (
+    //   settings.merged.security?.auth?.selectedType ===
+    //     AuthType.LOGIN_WITH_GOOGLE &&
+    //   config.isBrowserLaunchSuppressed()
+    // ) {
+    //   await getOauthClient(settings.merged.security.auth.selectedType, config);
+    // }
 
     if (config.getExperimentalZedIntegration()) {
       return runZedIntegration(config, settings, extensions, argv);

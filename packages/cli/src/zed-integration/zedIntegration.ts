@@ -15,7 +15,6 @@ import type {
 } from '@qwen-code/qwen-code-core';
 import {
   AuthType,
-  clearCachedCredentialFile,
   convertToFunctionResponse,
   DiscoveredMCPTool,
   StreamEventType,
@@ -128,7 +127,7 @@ class GeminiAgent {
   async authenticate({ methodId }: acp.AuthenticateRequest): Promise<void> {
     const method = z.nativeEnum(AuthType).parse(methodId);
 
-    await clearCachedCredentialFile();
+    // Credential caching removed - using local providers only
     await this.config.refreshAuth(method);
     this.settings.setValue(
       SettingScope.User,
