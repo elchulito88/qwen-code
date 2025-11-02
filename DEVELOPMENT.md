@@ -350,54 +350,125 @@ git push origin main
 
 ## Syncing with Upstream
 
-This fork maintains sync capability with the official QwenLM/qwen-code repository.
+This fork maintains sync capability with the official QwenLM/qwen-code repository using a rebase workflow to keep history clean.
 
-### Using the Sync Script
+### Quick Sync (Recommended)
+
+Use the npm script:
+
+```bash
+npm run sync
+```
+
+Or run the script directly:
 
 ```bash
 ./scripts/sync-upstream.sh
 ```
 
 The script automatically:
-1. Creates a backup branch with timestamp
-2. Fetches upstream changes
-3. Merges while preserving custom provider code
-4. Runs tests to verify everything still works
-5. Reports conflicts if any
+1. ✅ Checks that you're on the main branch
+2. ✅ Verifies there are no uncommitted changes
+3. ✅ Fetches upstream changes from QwenLM/qwen-code
+4. ✅ Shows how many commits you're behind
+5. ✅ Creates a timestamped backup branch
+6. ✅ Rebases your commits onto upstream/main
+7. ✅ Runs tests to verify everything still works
+8. ✅ Provides clear instructions for force pushing to your fork
+
+**Benefits of rebase over merge:**
+- Clean, linear git history
+- Your custom commits stay on top of upstream changes
+- No merge commits cluttering the history
+- Easier to understand what changed and when
+
+### After Successful Sync
+
+Once the sync completes:
+
+```bash
+# Test your local providers
+npm run start
+
+# If everything works, push to your GitHub fork
+git push origin main --force-with-lease
+```
+
+**Note:** You must use `--force-with-lease` (or `--force`) because rebase rewrites commit history. The `--force-with-lease` flag is safer as it won't overwrite commits if someone else has pushed to your fork.
 
 ### Manual Sync (Advanced)
 
-If you prefer manual control:
+If you prefer manual control or the script fails:
 
 ```bash
-# Create backup
-git checkout -b backup-$(date +%Y%m%d-%H%M%S)
+# 1. Ensure you're on main with no uncommitted changes
 git checkout main
+git status  # Should show "nothing to commit, working tree clean"
 
-# Fetch upstream
+# 2. Create a backup branch
+git branch backup-$(date +%Y%m%d-%H%M%S)
+
+# 3. Fetch upstream
 git fetch upstream
 
-# Merge upstream changes
-git merge upstream/main
+# 4. Check how many commits you're behind
+git log HEAD..upstream/main --oneline
 
-# Resolve conflicts (prefer keeping custom code in protected paths)
-# Protected paths:
-#   - packages/core/src/providers/
-#   - packages/cli/src/ui/commands/providersCommand.ts
-#   - packages/cli/src/ui/commands/modelsCommand.ts
-#   - LOCAL_PROVIDERS.md, DEVELOPMENT.md, CUSTOMIZATIONS.md
-#   - scripts/sync-upstream.sh
+# 5. Rebase your commits onto upstream
+git rebase upstream/main
 
-# Test after merge
+# 6. If conflicts occur, resolve them
+# Edit conflicting files, prioritizing custom code in protected paths
+git add .
+git rebase --continue
+
+# 7. If you want to abort the rebase
+git rebase --abort
+git reset --hard backup-YYYYMMDD-HHMMSS
+
+# 8. Test after successful rebase
 npm install
 npm test
 npm run build
 
-# If successful
-git push origin main
+# 9. Force push to your fork
+git push origin main --force-with-lease
+```
 
-# If problems occur, restore from backup
-git reset --hard backup-YYYYMMDD-HHMMSS
+### Handling Rebase Conflicts
+
+If conflicts occur during rebase, the script will pause and show you which files have conflicts.
+
+**Protected paths** (keep your custom code):
+- `packages/core/src/providers/` - All provider implementations
+- `packages/cli/src/ui/commands/providersCommand.ts` - /providers command
+- `packages/cli/src/ui/commands/modelsCommand.ts` - /models command
+- `LOCAL_PROVIDERS.md` - Local provider documentation
+- `DEVELOPMENT.md` - This file
+- `CUSTOMIZATIONS.md` - Customization tracking
+- `scripts/sync-upstream.sh` - Sync automation script
+
+**Conflict resolution workflow:**
+
+```bash
+# 1. See which files have conflicts
+git status
+
+# 2. Open each conflicting file and resolve conflicts
+# Look for conflict markers: <<<<<<<, =======, >>>>>>>
+# Keep your custom code from protected paths
+
+# 3. After resolving each file
+git add <resolved-file>
+
+# 4. Continue the rebase
+git rebase --continue
+
+# 5. Repeat until all conflicts are resolved
+
+# 6. Test thoroughly
+npm test
+npm run build
 ```
 
 ## Protected Paths
@@ -476,7 +547,8 @@ jobs:
 | Verify build | `npm run build` |
 | Verify everything | `npm test && npm run build` |
 | Merge to main | `git checkout main && git merge feature/name` |
-| Sync upstream | `./scripts/sync-upstream.sh` |
+| Sync with upstream | `npm run sync` or `./scripts/sync-upstream.sh` |
+| Push after sync | `git push origin main --force-with-lease` |
 
 ## Summary
 
