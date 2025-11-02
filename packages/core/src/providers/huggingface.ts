@@ -120,7 +120,9 @@ export class HuggingFaceProvider implements ModelProvider {
     _contents: Content[],
     _options: RequestOptions,
   ): AsyncGenerator<GenerateContentResponse> {
+    // Yield at least once to satisfy generator requirement, then throw
     throw new Error('Streaming not supported for HuggingFace provider');
+    yield; // Never reached, but satisfies linter
   }
 
   private convertContentsToMessages(

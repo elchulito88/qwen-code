@@ -57,11 +57,11 @@ describe('HuggingFaceProvider', () => {
 
     it('should handle timeout for TGI server check', async () => {
       const providerWithoutKey = new HuggingFaceProvider();
-      fetchMock.mockImplementation(() => {
-        return new Promise((_, reject) => {
+      fetchMock.mockImplementation(() =>
+        new Promise((_, reject) => {
           setTimeout(() => reject(new Error('Timeout')), 3000);
-        });
-      });
+        }),
+      );
 
       const result = await providerWithoutKey.isAvailable();
       expect(result).toBe(false);
@@ -282,7 +282,6 @@ describe('HuggingFaceProvider', () => {
 
       await expect(async () => {
         const stream = provider.sendStreamRequest(contents, {});
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for await (const _ of stream) {
           // Should throw immediately
         }

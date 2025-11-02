@@ -1,4 +1,4 @@
-# Qwen Code
+# Qwen Code - Local Models Edition
 
 <div align="center">
 
@@ -7,37 +7,24 @@
 [![npm version](https://img.shields.io/npm/v/@qwen-code/qwen-code.svg)](https://www.npmjs.com/package/@qwen-code/qwen-code)
 [![License](https://img.shields.io/github/license/QwenLM/qwen-code.svg)](./LICENSE)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
-[![Downloads](https://img.shields.io/npm/dm/@qwen-code/qwen-code.svg)](https://www.npmjs.com/package/@qwen-code/qwen-code)
 
-**AI-powered command-line workflow tool for developers**
+**AI-powered command-line workflow tool for developers - 100% Local & Private**
 
 [Installation](#installation) • [Quick Start](#quick-start) • [Features](#key-features) • [Documentation](./docs/) • [Contributing](./CONTRIBUTING.md)
 
 </div>
 
-<div align="center">
-  
-  <a href="https://qwenlm.github.io/qwen-code-docs/de/">Deutsch</a> | 
-  <a href="https://qwenlm.github.io/qwen-code-docs/fr">français</a> | 
-  <a href="https://qwenlm.github.io/qwen-code-docs/ja/">日本語</a> | 
-  <a href="https://qwenlm.github.io/qwen-code-docs/ru">Русский</a> | 
-  <a href="https://qwenlm.github.io/qwen-code-docs/zh/">中文</a>
-  
-</div>
+Qwen Code Local Edition is a powerful command-line AI workflow tool adapted from [**Gemini CLI**](https://github.com/google-gemini/gemini-cli) ([details](./README.gemini.md)), specifically optimized for running [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) models **completely locally**. It enhances your development workflow with advanced code understanding, automated tasks, and intelligent assistance - all while keeping your code private on your machine.
 
-Qwen Code is a powerful command-line AI workflow tool adapted from [**Gemini CLI**](https://github.com/google-gemini/gemini-cli) ([details](./README.gemini.md)), specifically optimized for [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) models. It enhances your development workflow with advanced code understanding, automated tasks, and intelligent assistance.
+## 💡 100% Local & Private
 
-## 💡 Free Options Available
+Run Qwen models completely on your machine with **zero API costs** and **full privacy**:
 
-Get started with Qwen Code at no cost using any of these options:
-
-### 🦙 Local Models (🔒 Privacy-First, Recommended for Local Development)
-
-Run Qwen models completely locally with zero API costs and full privacy:
+### 🦙 Local Providers (Privacy-First)
 
 - **Ollama**: Easiest local setup - `ollama pull qwen2.5-coder:7b` and you're ready
 - **LM Studio**: User-friendly GUI for local models
-- **HuggingFace**: Use Inference API or run local Text Generation Inference server
+- **HuggingFace**: Run local Text Generation Inference server
 
 **Benefits:**
 - ✅ **100% Private** - All inference happens locally, no data leaves your machine
@@ -47,30 +34,13 @@ Run Qwen models completely locally with zero API costs and full privacy:
 
 See [Local Provider Setup](#-local-provider-setup) for installation guide.
 
-### 🔥 Qwen OAuth (Cloud, Recommended for Remote Work)
-
-- **2,000 requests per day** with no token limits
-- **60 requests per minute** rate limit
-- Simply run `qwen` and authenticate with your qwen.ai account
-- Automatic credential management and refresh
-- Use `/auth` command to switch to Qwen OAuth if you have initialized with OpenAI compatible mode
-
-### 🌏 Regional Free Tiers
-
-- **Mainland China**: ModelScope offers **2,000 free API calls per day**
-- **International**: OpenRouter provides **up to 1,000 free API calls per day** worldwide
-
-For detailed setup instructions, see [Authorization](#authorization).
-
-> [!WARNING]
-> **Token Usage Notice**: Qwen Code may issue multiple API calls per cycle, resulting in higher token usage (similar to Claude Code). We're actively optimizing API efficiency.
-
 ## Key Features
 
 - **Code Understanding & Editing** - Query and edit large codebases beyond traditional context window limits
 - **Workflow Automation** - Automate operational tasks like handling pull requests and complex rebases
 - **Enhanced Parser** - Adapted parser specifically optimized for Qwen-Coder models
 - **Vision Model Support** - Automatically detect images in your input and seamlessly switch to vision-capable models for multimodal analysis
+- **Complete Privacy** - All processing happens on your local machine
 
 ## Installation
 
@@ -82,17 +52,10 @@ Ensure you have [Node.js version 20](https://nodejs.org/en/download) or higher i
 curl -qL https://www.npmjs.com/install.sh | sh
 ```
 
-### Install from npm
-
-```bash
-npm install -g @qwen-code/qwen-code@latest
-qwen --version
-```
-
 ### Install from source
 
 ```bash
-git clone https://github.com/QwenLM/qwen-code.git
+git clone https://github.com/elchulito88/qwen-code.git
 cd qwen-code
 npm install
 npm install -g .
@@ -103,6 +66,89 @@ npm install -g .
 ```bash
 brew install qwen-code
 ```
+
+## 🦙 Local Provider Setup
+
+This fork includes support for running Qwen models locally through Ollama, LM Studio, or HuggingFace. Perfect for privacy-conscious users or offline development.
+
+### Quick Start with Ollama (Recommended)
+
+**1. Install Ollama:**
+```bash
+# macOS
+brew install ollama
+
+# Linux
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Windows
+# Download from https://ollama.ai
+```
+
+**2. Pull a Qwen model:**
+```bash
+ollama pull qwen2.5-coder:7b     # 7B model (8GB+ RAM)
+ollama pull qwen2.5-coder:14b    # 14B model (16GB+ RAM)
+ollama pull qwen2.5-coder:32b    # 32B model (32GB+ RAM)
+```
+
+**3. Start using Qwen Code:**
+```bash
+qwen
+
+# Check available providers
+/providers
+
+# Start chatting
+> Help me write a Python function
+```
+
+### Alternative: LM Studio
+
+1. Download from https://lmstudio.ai
+2. Open LM Studio and download a Qwen model
+3. Start the local server (click server icon)
+4. Run `qwen` - it will auto-detect LM Studio
+
+### Alternative: HuggingFace Local TGI
+
+```bash
+docker run -p 8080:80 \
+  ghcr.io/huggingface/text-generation-inference:latest \
+  --model-id Qwen/Qwen2.5-Coder-7B-Instruct
+```
+
+### Configuration
+
+Create or edit `.qwen/settings.json` in your home directory:
+
+```json
+{
+  "providers": {
+    "preferred": "auto",
+    "ollama": {
+      "enabled": true,
+      "endpoint": "http://localhost:11434",
+      "defaultModel": "qwen2.5-coder:7b"
+    },
+    "lmstudio": {
+      "enabled": true,
+      "endpoint": "http://127.0.0.1:1234",
+      "defaultModel": "qwen2.5-coder-14b"
+    }
+  }
+}
+```
+
+### Provider Commands
+
+```bash
+/providers        # List available providers and their models
+/models list      # List models from active provider
+/models pull      # Download a model
+```
+
+**For complete documentation**, see [LOCAL_PROVIDERS.md](./LOCAL_PROVIDERS.md)
 
 ## Quick Start
 
@@ -118,7 +164,7 @@ qwen
 
 ### Session Management
 
-Control your token usage with configurable session limits to optimize costs and performance.
+Control your token usage with configurable session limits to optimize memory and performance.
 
 #### Configure Session Token Limit
 
@@ -136,7 +182,7 @@ Create or edit `.qwen/settings.json` in your home directory:
 - **`/clear`** - Clear all conversation history and start fresh
 - **`/stats`** - Check current token usage and limits
 
-> 📝 **Note**: Session token limit applies to a single conversation, not cumulative API calls.
+> 📝 **Note**: Session token limit applies to a single conversation.
 
 ### Vision Model Configuration
 
@@ -189,195 +235,6 @@ To completely disable vision model support, add to your `.qwen/settings.json`:
 ```
 
 > 💡 **Tip**: In YOLO mode (`--yolo`), vision switching happens automatically without prompts when images are detected.
-
-### Authorization
-
-Choose your preferred authentication method based on your needs:
-
-#### 1. Qwen OAuth (🚀 Recommended - Start in 30 seconds)
-
-The easiest way to get started - completely free with generous quotas:
-
-```bash
-# Just run this command and follow the browser authentication
-qwen
-```
-
-**What happens:**
-
-1. **Instant Setup**: CLI opens your browser automatically
-2. **One-Click Login**: Authenticate with your qwen.ai account
-3. **Automatic Management**: Credentials cached locally for future use
-4. **No Configuration**: Zero setup required - just start coding!
-
-**Free Tier Benefits:**
-
-- ✅ **2,000 requests/day** (no token counting needed)
-- ✅ **60 requests/minute** rate limit
-- ✅ **Automatic credential refresh**
-- ✅ **Zero cost** for individual users
-- ℹ️ **Note**: Model fallback may occur to maintain service quality
-
-#### 2. OpenAI-Compatible API
-
-Use API keys for OpenAI or other compatible providers:
-
-**Configuration Methods:**
-
-1. **Environment Variables**
-
-   ```bash
-   export OPENAI_API_KEY="your_api_key_here"
-   export OPENAI_BASE_URL="your_api_endpoint"
-   export OPENAI_MODEL="your_model_choice"
-   ```
-
-2. **Project `.env` File**
-   Create a `.env` file in your project root:
-   ```env
-   OPENAI_API_KEY=your_api_key_here
-   OPENAI_BASE_URL=your_api_endpoint
-   OPENAI_MODEL=your_model_choice
-   ```
-
-**API Provider Options**
-
-> ⚠️ **Regional Notice:**
->
-> - **Mainland China**: Use Alibaba Cloud Bailian or ModelScope
-> - **International**: Use Alibaba Cloud ModelStudio or OpenRouter
-
-<details>
-<summary><b>🇨🇳 For Users in Mainland China</b></summary>
-
-**Option 1: Alibaba Cloud Bailian** ([Apply for API Key](https://bailian.console.aliyun.com/))
-
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-export OPENAI_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
-export OPENAI_MODEL="qwen3-coder-plus"
-```
-
-**Option 2: ModelScope (Free Tier)** ([Apply for API Key](https://modelscope.cn/docs/model-service/API-Inference/intro))
-
-- ✅ **2,000 free API calls per day**
-- ⚠️ Connect your Aliyun account to avoid authentication errors
-
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-export OPENAI_BASE_URL="https://api-inference.modelscope.cn/v1"
-export OPENAI_MODEL="Qwen/Qwen3-Coder-480B-A35B-Instruct"
-```
-
-</details>
-
-<details>
-<summary><b>🌍 For International Users</b></summary>
-
-**Option 1: Alibaba Cloud ModelStudio** ([Apply for API Key](https://modelstudio.console.alibabacloud.com/))
-
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-export OPENAI_BASE_URL="https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
-export OPENAI_MODEL="qwen3-coder-plus"
-```
-
-**Option 2: OpenRouter (Free Tier Available)** ([Apply for API Key](https://openrouter.ai/))
-
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
-export OPENAI_MODEL="qwen/qwen3-coder:free"
-```
-
-</details>
-
-## 🦙 Local Provider Setup
-
-This fork includes support for running Qwen models locally through Ollama, LM Studio, or HuggingFace. Perfect for privacy-conscious users or offline development.
-
-### Quick Start with Ollama (Recommended)
-
-**1. Install Ollama:**
-```bash
-# macOS
-brew install ollama
-
-# Linux
-curl -fsSL https://ollama.ai/install.sh | sh
-```
-
-**2. Pull a Qwen model:**
-```bash
-ollama pull qwen2.5-coder:7b     # 7B model (8GB+ RAM)
-ollama pull qwen2.5-coder:14b    # 14B model (16GB+ RAM)
-ollama pull qwen2.5-coder:32b    # 32B model (32GB+ RAM)
-```
-
-**3. Start using Qwen Code:**
-```bash
-qwen
-
-# Check available providers
-/providers
-
-# Start chatting
-> Help me write a Python function
-```
-
-### Alternative: LM Studio
-
-1. Download from https://lmstudio.ai
-2. Open LM Studio and download a Qwen model
-3. Start the local server (click server icon)
-4. Run `qwen` - it will auto-detect LM Studio
-
-### Alternative: HuggingFace
-
-**Option A - Inference API:**
-```bash
-export HF_API_KEY="your-api-key"
-qwen
-```
-
-**Option B - Local TGI Server:**
-```bash
-docker run -p 8080:80 \
-  ghcr.io/huggingface/text-generation-inference:latest \
-  --model-id Qwen/Qwen2.5-Coder-7B-Instruct
-```
-
-### Configuration
-
-Create or edit `.qwen/settings.json`:
-
-```json
-{
-  "providers": {
-    "preferred": "auto",
-    "ollama": {
-      "enabled": true,
-      "endpoint": "http://localhost:11434",
-      "defaultModel": "qwen2.5-coder:7b"
-    },
-    "lmstudio": {
-      "enabled": true,
-      "endpoint": "http://127.0.0.1:1234",
-      "defaultModel": "qwen2.5-coder-14b"
-    }
-  }
-}
-```
-
-### Provider Commands
-
-```bash
-/providers        # List available providers and their models
-/models list      # List models from active provider (coming soon)
-/models pull      # Download a model (coming soon)
-```
-
-**For complete documentation**, see [LOCAL_PROVIDERS.md](./LOCAL_PROVIDERS.md)
 
 ## Usage Examples
 
@@ -483,6 +340,8 @@ qwen
 - `/clear` - Clear conversation history
 - `/compress` - Compress history to save tokens
 - `/stats` - Show current session information
+- `/providers` - List available local providers
+- `/models list` - List available models
 - `/exit` or `/quit` - Exit Qwen Code
 
 ### Keyboard Shortcuts
@@ -506,15 +365,43 @@ qwen
 
 - **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Development workflow and branch management (required reading)
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - How to contribute to the project
-- **[Authentication Guide](./docs/cli/authentication.md)** - Detailed authentication setup
+- **[LOCAL_PROVIDERS.md](./LOCAL_PROVIDERS.md)** - Complete local provider documentation
 
 ## Troubleshooting
 
 If you encounter issues, check the [troubleshooting guide](docs/troubleshooting.md).
 
+### Common Issues
+
+**Ollama not detected:**
+```bash
+# Make sure Ollama is running
+ollama serve
+
+# In a new terminal
+qwen
+```
+
+**Model not found:**
+```bash
+# List available models
+ollama list
+
+# Pull the model you need
+ollama pull qwen2.5-coder:7b
+```
+
+**Memory issues:**
+- Try a smaller model (7B instead of 14B)
+- Reduce context window in settings
+- Close other applications
+
 ## Acknowledgments
 
-This project is based on [Google Gemini CLI](https://github.com/google-gemini/gemini-cli). We acknowledge and appreciate the excellent work of the Gemini CLI team. Our main contribution focuses on parser-level adaptations to better support Qwen-Coder models.
+This project is based on [Google Gemini CLI](https://github.com/google-gemini/gemini-cli). We acknowledge and appreciate the excellent work of the Gemini CLI team. Our main contributions focus on:
+- Parser-level adaptations to better support Qwen-Coder models
+- Complete local provider support for privacy-focused development
+- Removal of cloud dependencies for 100% offline operation
 
 ## License
 

@@ -47,11 +47,11 @@ describe('OllamaProvider', () => {
     });
 
     it('should return false when request times out', async () => {
-      fetchMock.mockImplementation(() => {
-        return new Promise((_, reject) => {
+      fetchMock.mockImplementation(() =>
+        new Promise((_, reject) => {
           setTimeout(() => reject(new Error('Timeout')), 3000);
-        });
-      });
+        }),
+      );
 
       const result = await provider.isAvailable();
       expect(result).toBe(false);
@@ -292,7 +292,6 @@ describe('OllamaProvider', () => {
 
       await expect(async () => {
         const stream = provider.sendStreamRequest(contents, {});
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for await (const _ of stream) {
           // Should throw before yielding any values
         }
@@ -358,7 +357,7 @@ describe('OllamaProvider', () => {
 
   describe('endpoint configuration', () => {
     it('should use default endpoint when not specified', () => {
-      const defaultProvider = new OllamaProvider();
+      const _defaultProvider = new OllamaProvider();
       expect(fetchMock).toBeDefined();
       // Endpoint is private, but we can verify through isAvailable call
     });

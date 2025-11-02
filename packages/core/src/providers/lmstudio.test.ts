@@ -47,11 +47,11 @@ describe('LMStudioProvider', () => {
     });
 
     it('should handle timeout gracefully', async () => {
-      fetchMock.mockImplementation(() => {
-        return new Promise((_, reject) => {
+      fetchMock.mockImplementation(() =>
+        new Promise((_, reject) => {
           setTimeout(() => reject(new Error('Timeout')), 3000);
-        });
-      });
+        }),
+      );
 
       const result = await provider.isAvailable();
       expect(result).toBe(false);
@@ -321,7 +321,6 @@ describe('LMStudioProvider', () => {
 
       await expect(async () => {
         const stream = provider.sendStreamRequest(contents, {});
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for await (const _ of stream) {
           // Should throw before yielding
         }
@@ -386,7 +385,7 @@ describe('LMStudioProvider', () => {
 
   describe('endpoint configuration', () => {
     it('should use default endpoint when not specified', () => {
-      const defaultProvider = new LMStudioProvider();
+      const _defaultProvider = new LMStudioProvider();
       expect(fetchMock).toBeDefined();
     });
 

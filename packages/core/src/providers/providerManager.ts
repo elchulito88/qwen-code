@@ -91,7 +91,7 @@ export class ProviderManager {
           endpoint: this.getProviderEndpoint(name),
           models,
         });
-      } catch (error) {
+      } catch (_error) {
         results.push({
           provider: name,
           available: false,
