@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ContentGenerator } from '../core/contentGenerator.js';
-import { AuthType } from '../core/contentGenerator.js';
+import type { ContentGenerator, AuthType } from '../core/contentGenerator.js';
 // import { getOauthClient } from './oauth2.js'; // Removed - cloud-only feature
 // import { setupUser } from './setup.js'; // Removed - cloud-only feature
 import type { HttpOptions } from './server.js';
@@ -16,8 +15,8 @@ import { LoggingContentGenerator } from '../core/loggingContentGenerator.js';
 export async function createCodeAssistContentGenerator(
   httpOptions: HttpOptions,
   authType: AuthType,
-  config: Config,
-  sessionId?: string,
+  _config: Config,
+  _sessionId?: string,
 ): Promise<ContentGenerator> {
   // Removed cloud-only Google Code Assist authentication
   // if (

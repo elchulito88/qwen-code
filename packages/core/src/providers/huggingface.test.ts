@@ -138,7 +138,7 @@ describe('HuggingFaceProvider', () => {
       );
 
       expect(result.candidates).toHaveLength(1);
-      expect(result.candidates![0]!.content.parts[0]).toEqual({
+      expect(result.candidates![0]!.content!.parts![0]!).toEqual({
         text: 'print("Hello, World!")',
       });
     });
@@ -223,7 +223,7 @@ describe('HuggingFaceProvider', () => {
       });
 
       const result = await provider.sendRequest(contents, {});
-      expect(result.candidates![0]!.content.parts[0]).toEqual({
+      expect(result.candidates![0]!.content!.parts![0]!).toEqual({
         text: 'Array response',
       });
     });
@@ -239,7 +239,7 @@ describe('HuggingFaceProvider', () => {
       });
 
       const result = await provider.sendRequest(contents, {});
-      expect(result.candidates![0]!.content.parts[0]).toEqual({
+      expect(result.candidates![0]!.content!.parts![0]!).toEqual({
         text: 'Object response',
       });
     });
@@ -255,7 +255,7 @@ describe('HuggingFaceProvider', () => {
       });
 
       const result = await provider.sendRequest(contents, {});
-      expect(result.candidates![0]!.content.parts[0]).toEqual({ text: '' });
+      expect(result.candidates![0]!.content!.parts![0]!).toEqual({ text: '' });
     });
 
     it('should throw error on failed request', async () => {

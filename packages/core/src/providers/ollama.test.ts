@@ -148,7 +148,7 @@ describe('OllamaProvider', () => {
       });
 
       expect(result.candidates).toHaveLength(1);
-      expect(result.candidates![0]!.content.parts[0]).toEqual({
+      expect(result.candidates![0]!.content!.parts![0]!).toEqual({
         text: 'I am doing well, thank you!',
       });
       expect(result.candidates?.[0]?.finishReason).toBe(1); // STOP
@@ -270,8 +270,8 @@ describe('OllamaProvider', () => {
       const stream = provider.sendStreamRequest(contents, {});
 
       for await (const chunk of stream) {
-        const text = chunk.candidates?.[0]?.content.parts[0];
-        if ('text' in text!) {
+        const text = chunk.candidates?.[0]?.content?.parts?.[0];
+        if (text && 'text' in text) {
           responses.push(text.text || '');
         }
       }
@@ -330,8 +330,8 @@ describe('OllamaProvider', () => {
       const stream = provider.sendStreamRequest(contents, {});
 
       for await (const chunk of stream) {
-        const text = chunk.candidates?.[0]?.content.parts[0];
-        if ('text' in text!) {
+        const text = chunk.candidates?.[0]?.content?.parts?.[0];
+        if (text && 'text' in text) {
           responses.push(text.text || '');
         }
       }

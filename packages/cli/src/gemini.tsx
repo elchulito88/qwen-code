@@ -32,7 +32,6 @@ import {
 import { getCliVersion } from './utils/version.js';
 import type { Config } from '@qwen-code/qwen-code-core';
 import {
-  AuthType,
   logUserPrompt,
 } from '@qwen-code/qwen-code-core';
 import {

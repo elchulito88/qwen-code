@@ -118,7 +118,7 @@ export function createContentGeneratorConfig(
 export async function createContentGenerator(
   config: ContentGeneratorConfig,
   gcConfig: Config,
-  sessionId?: string,
+  _sessionId?: string,
 ): Promise<ContentGenerator> {
   const version = process.env['CLI_VERSION'] || process.version;
   const userAgent = `QwenCode/${version} (${process.platform}; ${process.arch})`;

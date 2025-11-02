@@ -169,7 +169,7 @@ describe('LMStudioProvider', () => {
       });
 
       expect(result.candidates).toHaveLength(1);
-      expect(result.candidates![0]!.content.parts[0]).toEqual({
+      expect(result.candidates![0]!.content!.parts![0]!).toEqual({
         text: 'function add(a, b) { return a + b; }',
       });
       expect(result.candidates?.[0]?.finishReason).toBe(1); // STOP
@@ -261,7 +261,7 @@ describe('LMStudioProvider', () => {
       });
 
       const result = await provider.sendRequest(contents, {});
-      expect(result.candidates![0]!.content.parts[0]).toEqual({ text: '' });
+      expect(result.candidates![0]!.content!.parts![0]!).toEqual({ text: '' });
     });
   });
 
@@ -299,8 +299,8 @@ describe('LMStudioProvider', () => {
       const stream = provider.sendStreamRequest(contents, {});
 
       for await (const chunk of stream) {
-        const text = chunk.candidates?.[0]?.content.parts[0];
-        if ('text' in text!) {
+        const text = chunk.candidates?.[0]?.content?.parts?.[0];
+        if (text && 'text' in text) {
           responses.push(text.text || '');
         }
       }
@@ -358,8 +358,8 @@ describe('LMStudioProvider', () => {
       const stream = provider.sendStreamRequest(contents, {});
 
       for await (const chunk of stream) {
-        const text = chunk.candidates?.[0]?.content.parts[0];
-        if ('text' in text!) {
+        const text = chunk.candidates?.[0]?.content?.parts?.[0];
+        if (text && 'text' in text) {
           responses.push(text.text || '');
         }
       }
