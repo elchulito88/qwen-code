@@ -52,7 +52,7 @@ Ensure you have [Node.js version 20](https://nodejs.org/en/download) or higher i
 curl -qL https://www.npmjs.com/install.sh | sh
 ```
 
-### Install from Source (Recommended)
+### Install from Source (Only Installation Method)
 
 ```bash
 git clone https://github.com/elchulito88/qwen-code.git
@@ -61,13 +61,10 @@ npm install
 npm install -g .
 ```
 
-### Install from npm
-
-```bash
-npm install -g @qwen-code/qwen-code
-```
-
-> **Note**: This is a fork of the original Qwen Code. The command `brew install qwen-code` installs the upstream [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code), not this privacy-focused fork.
+> **⚠️ Important**: This is a privacy-focused fork of the original Qwen Code.
+> - `npm install -g @qwen-code/qwen-code` installs the upstream [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code), **not this fork**
+> - `brew install qwen-code` also installs the upstream version, **not this fork**
+> - **Source installation above is the only way to install this privacy-focused fork**
 
 ## 🦙 Local Provider Setup
 
