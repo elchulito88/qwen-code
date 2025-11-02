@@ -32,12 +32,12 @@ import {
 } from './fileUtils.js';
 import { StandardFileSystemService } from '../services/fileSystemService.js';
 
-vi.mock('mime/lite', () => ({
-  default: { getType: vi.fn() },
-  getType: vi.fn(),
+vi.mock('mime', () => ({
+  default: { lookup: vi.fn() },
+  lookup: vi.fn(),
 }));
 
-const mockMimeGetType = mime.getType as Mock;
+const mockMimeLookup = mime.lookup as Mock;
 
 describe('fileUtils', () => {
   let tempRootDir: string;
@@ -51,7 +51,7 @@ describe('fileUtils', () => {
   let directoryPath: string;
 
   beforeEach(() => {
-    vi.resetAllMocks(); // Reset all mocks, including mime.getType
+    vi.resetAllMocks(); // Reset all mocks, including mime.lookup
 
     tempRootDir = actualNodeFs.mkdtempSync(
       path.join(os.tmpdir(), 'fileUtils-test-'),
@@ -591,12 +591,12 @@ describe('fileUtils', () => {
     });
 
     it('should detect image type by extension (png)', async () => {
-      mockMimeGetType.mockReturnValueOnce('image/png');
+      mockMimeLookup.mockReturnValueOnce('image/png');
       expect(await detectFileType('file.png')).toBe('image');
     });
 
     it('should detect image type by extension (jpeg)', async () => {
-      mockMimeGetType.mockReturnValueOnce('image/jpeg');
+      mockMimeLookup.mockReturnValueOnce('image/jpeg');
       expect(await detectFileType('file.jpg')).toBe('image');
     });
 
@@ -606,31 +606,31 @@ describe('fileUtils', () => {
     });
 
     it('should detect pdf type by extension', async () => {
-      mockMimeGetType.mockReturnValueOnce('application/pdf');
+      mockMimeLookup.mockReturnValueOnce('application/pdf');
       expect(await detectFileType('file.pdf')).toBe('pdf');
     });
 
     it('should detect audio type by extension', async () => {
-      mockMimeGetType.mockReturnValueOnce('audio/mpeg');
+      mockMimeLookup.mockReturnValueOnce('audio/mpeg');
       expect(await detectFileType('song.mp3')).toBe('audio');
     });
 
     it('should detect video type by extension', async () => {
-      mockMimeGetType.mockReturnValueOnce('video/mp4');
+      mockMimeLookup.mockReturnValueOnce('video/mp4');
       expect(await detectFileType('movie.mp4')).toBe('video');
     });
 
     it('should detect known binary extensions as binary (e.g. .zip)', async () => {
-      mockMimeGetType.mockReturnValueOnce('application/zip');
+      mockMimeLookup.mockReturnValueOnce('application/zip');
       expect(await detectFileType('archive.zip')).toBe('binary');
     });
     it('should detect known binary extensions as binary (e.g. .exe)', async () => {
-      mockMimeGetType.mockReturnValueOnce('application/octet-stream'); // Common for .exe
+      mockMimeLookup.mockReturnValueOnce('application/octet-stream'); // Common for .exe
       expect(await detectFileType('app.exe')).toBe('binary');
     });
 
     it('should use isBinaryFile for unknown extensions and detect as binary', async () => {
-      mockMimeGetType.mockReturnValueOnce(false); // Unknown mime type
+      mockMimeLookup.mockReturnValueOnce(false); // Unknown mime type
       // Create a file that isBinaryFile will identify as binary
       const binaryContent = Buffer.from([
         0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
@@ -640,7 +640,7 @@ describe('fileUtils', () => {
     });
 
     it('should default to text if mime type is unknown and content is not binary', async () => {
-      mockMimeGetType.mockReturnValueOnce(false); // Unknown mime type
+      mockMimeLookup.mockReturnValueOnce(false); // Unknown mime type
       // filePathForDetectTest is already a text file by default from beforeEach
       expect(await detectFileType(filePathForDetectTest)).toBe('text');
     });
@@ -698,7 +698,7 @@ describe('fileUtils', () => {
 
     it('should handle read errors for image/pdf files', async () => {
       actualNodeFs.writeFileSync(testImageFilePath, 'content'); // File must exist
-      mockMimeGetType.mockReturnValue('image/png');
+      mockMimeLookup.mockReturnValue('image/png');
       const readError = new Error('Simulated image read error');
       vi.spyOn(fsPromises, 'readFile').mockRejectedValueOnce(readError);
 
@@ -714,7 +714,7 @@ describe('fileUtils', () => {
     it('should process an image file', async () => {
       const fakePngData = Buffer.from('fake png data');
       actualNodeFs.writeFileSync(testImageFilePath, fakePngData);
-      mockMimeGetType.mockReturnValue('image/png');
+      mockMimeLookup.mockReturnValue('image/png');
       const result = await processSingleFileContent(
         testImageFilePath,
         tempRootDir,
@@ -736,7 +736,7 @@ describe('fileUtils', () => {
     it('should process a PDF file', async () => {
       const fakePdfData = Buffer.from('fake pdf data');
       actualNodeFs.writeFileSync(testPdfFilePath, fakePdfData);
-      mockMimeGetType.mockReturnValue('application/pdf');
+      mockMimeLookup.mockReturnValue('application/pdf');
       const result = await processSingleFileContent(
         testPdfFilePath,
         tempRootDir,
@@ -764,7 +764,7 @@ describe('fileUtils', () => {
       const testSvgFilePath = path.join(tempRootDir, 'test.svg');
       actualNodeFs.writeFileSync(testSvgFilePath, svgContent, 'utf-8');
 
-      mockMimeGetType.mockReturnValue('image/svg+xml');
+      mockMimeLookup.mockReturnValue('image/svg+xml');
 
       const result = await processSingleFileContent(
         testSvgFilePath,
@@ -781,7 +781,7 @@ describe('fileUtils', () => {
         testBinaryFilePath,
         Buffer.from([0x00, 0x01, 0x02]),
       );
-      mockMimeGetType.mockReturnValueOnce('application/octet-stream');
+      mockMimeLookup.mockReturnValueOnce('application/octet-stream');
       // isBinaryFile will operate on the real file.
 
       const result = await processSingleFileContent(

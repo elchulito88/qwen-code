@@ -59,7 +59,6 @@ vi.mock('./App.js', () => ({
 vi.mock('./hooks/useQuotaAndFallback.js');
 vi.mock('./hooks/useHistoryManager.js');
 vi.mock('./hooks/useThemeCommand.js');
-vi.mock('./auth/useAuth.js');
 vi.mock('./hooks/useEditorSettings.js');
 vi.mock('./hooks/useSettingsCommand.js');
 vi.mock('./hooks/useModelCommand.js');
@@ -93,7 +92,6 @@ vi.mock('../utils/cleanup.js');
 
 import { useHistory } from './hooks/useHistoryManager.js';
 import { useThemeCommand } from './hooks/useThemeCommand.js';
-import { useAuthCommand } from './auth/useAuth.js';
 import { useEditorSettings } from './hooks/useEditorSettings.js';
 import { useSettingsCommand } from './hooks/useSettingsCommand.js';
 import { useModelCommand } from './hooks/useModelCommand.js';
@@ -125,7 +123,6 @@ describe('AppContainer State Management', () => {
   const mockedUseQuotaAndFallback = useQuotaAndFallback as Mock;
   const mockedUseHistory = useHistory as Mock;
   const mockedUseThemeCommand = useThemeCommand as Mock;
-  const mockedUseAuthCommand = useAuthCommand as Mock;
   const mockedUseEditorSettings = useEditorSettings as Mock;
   const mockedUseSettingsCommand = useSettingsCommand as Mock;
   const mockedUseModelCommand = useModelCommand as Mock;
@@ -180,17 +177,6 @@ describe('AppContainer State Management', () => {
       openThemeDialog: vi.fn(),
       handleThemeSelect: vi.fn(),
       handleThemeHighlight: vi.fn(),
-    });
-    mockedUseAuthCommand.mockReturnValue({
-      authState: 'authenticated',
-      setAuthState: vi.fn(),
-      authError: null,
-      onAuthError: vi.fn(),
-      isAuthDialogOpen: false,
-      isAuthenticating: false,
-      handleAuthSelect: vi.fn(),
-      openAuthDialog: vi.fn(),
-      cancelAuthentication: vi.fn(),
     });
     mockedUseEditorSettings.mockReturnValue({
       isEditorDialogOpen: false,
@@ -1027,18 +1013,8 @@ describe('AppContainer State Management', () => {
   });
 
   describe('Keyboard Input Handling', () => {
-    it('should block quit command during authentication', () => {
-      mockedUseAuthCommand.mockReturnValue({
-        authState: 'unauthenticated',
-        setAuthState: vi.fn(),
-        authError: null,
-        onAuthError: vi.fn(),
-        isAuthDialogOpen: false,
-        isAuthenticating: true,
-        handleAuthSelect: vi.fn(),
-        openAuthDialog: vi.fn(),
-        cancelAuthentication: vi.fn(),
-      });
+    it.skip('should block quit command during authentication', () => {
+      // Test skipped - authentication functionality removed
 
       const mockHandleSlashCommand = vi.fn();
       mockedUseSlashCommandProcessor.mockReturnValue({

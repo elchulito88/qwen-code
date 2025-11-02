@@ -158,7 +158,7 @@ export async function readFileWithEncoding(filePath: string): Promise<string> {
  * @returns The specific MIME type string (e.g., 'text/python', 'application/javascript') or undefined if not found or ambiguous.
  */
 export function getSpecificMimeType(filePath: string): string | undefined {
-  const lookedUpMime = mime.getType(filePath);
+  const lookedUpMime = mime.lookup(filePath);
   return typeof lookedUpMime === 'string' ? lookedUpMime : undefined;
 }
 
@@ -262,7 +262,7 @@ export async function detectFileType(
     return 'svg';
   }
 
-  const lookedUpMimeType = mime.getType(filePath); // Returns null if not found, or the mime type string
+  const lookedUpMimeType = mime.lookup(filePath); // Returns default type if not found, or the mime type string
   if (lookedUpMimeType) {
     if (lookedUpMimeType.startsWith('image/')) {
       return 'image';
@@ -438,7 +438,7 @@ export async function processSingleFileContent(
           llmContent: {
             inlineData: {
               data: base64Data,
-              mimeType: mime.getType(filePath) || 'application/octet-stream',
+              mimeType: mime.lookup(filePath) || 'application/octet-stream',
             },
           },
           returnDisplay: `Read ${fileType} file: ${relativePathForDisplay}`,

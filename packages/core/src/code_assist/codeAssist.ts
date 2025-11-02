@@ -7,7 +7,7 @@
 import type { ContentGenerator } from '../core/contentGenerator.js';
 import { AuthType } from '../core/contentGenerator.js';
 // import { getOauthClient } from './oauth2.js'; // Removed - cloud-only feature
-import { setupUser } from './setup.js';
+// import { setupUser } from './setup.js'; // Removed - cloud-only feature
 import type { HttpOptions } from './server.js';
 import { CodeAssistServer } from './server.js';
 import type { Config } from '../config/config.js';

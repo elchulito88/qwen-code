@@ -25,7 +25,6 @@ import {
   type HistoryItem,
   ToolCallStatus,
   type HistoryItemWithoutId,
-  AuthState,
 } from './types.js';
 import { MessageType, StreamingState } from './types.js';
 import {
@@ -47,8 +46,6 @@ import process from 'node:process';
 import { useHistory } from './hooks/useHistoryManager.js';
 import { useMemoryMonitor } from './hooks/useMemoryMonitor.js';
 import { useThemeCommand } from './hooks/useThemeCommand.js';
-import { useAuthCommand } from './auth/useAuth.js';
-import { useQwenAuth } from './hooks/useQwenAuth.js';
 import { useQuotaAndFallback } from './hooks/useQuotaAndFallback.js';
 import { useEditorSettings } from './hooks/useEditorSettings.js';
 import { useSettingsCommand } from './hooks/useSettingsCommand.js';
@@ -335,25 +332,22 @@ export const AppContainer = (props: AppContainerProps) => {
     initializationResult.themeError,
   );
 
-  const {
-    setAuthState,
-    authError,
-    onAuthError,
-    isAuthDialogOpen,
-    isAuthenticating,
-    handleAuthSelect,
-    openAuthDialog,
-  } = useAuthCommand(settings, config);
-
-  // Qwen OAuth authentication state
-  const {
-    isQwenAuth,
-    isQwenAuthenticating,
-    deviceAuth,
-    authStatus,
-    authMessage,
-    cancelQwenAuth,
-  } = useQwenAuth(settings, isAuthenticating);
+  // Auth functionality removed - using local providers only
+  const [authError, setAuthError] = useState<string | null>(null);
+  const isAuthDialogOpen = false;
+  const isAuthenticating = false;
+  const setAuthState = useCallback(() => {
+    // Auth state management removed
+  }, []);
+  const onAuthError = useCallback((error: string) => {
+    setAuthError(error);
+  }, []);
+  const handleAuthSelect = useCallback(async () => {
+    // Auth dialog removed
+  }, []);
+  const openAuthDialog = useCallback(() => {
+    // Auth dialog removed
+  }, []);
 
   const { proQuotaRequest, handleProQuotaChoice } = useQuotaAndFallback({
     config,
@@ -362,20 +356,6 @@ export const AppContainer = (props: AppContainerProps) => {
     setAuthState,
     setModelSwitchedFromQuotaError,
   });
-
-  // Handle Qwen OAuth timeout
-  const handleQwenAuthTimeout = useCallback(() => {
-    onAuthError('Qwen OAuth authentication timed out. Please try again.');
-    cancelQwenAuth();
-    setAuthState(AuthState.Updating);
-  }, [onAuthError, cancelQwenAuth, setAuthState]);
-
-  // Handle Qwen OAuth cancel
-  const handleQwenAuthCancel = useCallback(() => {
-    onAuthError('Qwen OAuth authentication cancelled.');
-    cancelQwenAuth();
-    setAuthState(AuthState.Updating);
-  }, [onAuthError, cancelQwenAuth, setAuthState]);
 
   // Sync user tier from config when authentication changes
   // TODO: Implement getUserTier() method on Config if needed
@@ -1186,7 +1166,6 @@ export const AppContainer = (props: AppContainerProps) => {
     isVisionSwitchDialogOpen ||
     isPermissionsDialogOpen ||
     isAuthDialogOpen ||
-    (isAuthenticating && isQwenAuthenticating) ||
     isEditorDialogOpen ||
     showIdeRestartPrompt ||
     !!proQuotaRequest ||
@@ -1208,12 +1187,6 @@ export const AppContainer = (props: AppContainerProps) => {
       isConfigInitialized,
       authError,
       isAuthDialogOpen,
-      // Qwen OAuth state
-      isQwenAuth,
-      isQwenAuthenticating,
-      deviceAuth,
-      authStatus,
-      authMessage,
       editorError,
       isEditorDialogOpen,
       corgiMode,
@@ -1302,12 +1275,6 @@ export const AppContainer = (props: AppContainerProps) => {
       isConfigInitialized,
       authError,
       isAuthDialogOpen,
-      // Qwen OAuth state
-      isQwenAuth,
-      isQwenAuthenticating,
-      deviceAuth,
-      authStatus,
-      authMessage,
       editorError,
       isEditorDialogOpen,
       corgiMode,
@@ -1399,9 +1366,6 @@ export const AppContainer = (props: AppContainerProps) => {
       handleAuthSelect,
       setAuthState,
       onAuthError,
-      // Qwen OAuth handlers
-      handleQwenAuthTimeout,
-      handleQwenAuthCancel,
       handleEditorSelect,
       exitEditorDialog,
       closeSettingsDialog,
@@ -1434,9 +1398,6 @@ export const AppContainer = (props: AppContainerProps) => {
       handleAuthSelect,
       setAuthState,
       onAuthError,
-      // Qwen OAuth handlers
-      handleQwenAuthTimeout,
-      handleQwenAuthCancel,
       handleEditorSelect,
       exitEditorDialog,
       closeSettingsDialog,

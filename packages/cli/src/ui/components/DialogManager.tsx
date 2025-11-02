@@ -12,9 +12,6 @@ import { ShellConfirmationDialog } from './ShellConfirmationDialog.js';
 import { ConsentPrompt } from './ConsentPrompt.js';
 import { ThemeDialog } from './ThemeDialog.js';
 import { SettingsDialog } from './SettingsDialog.js';
-import { AuthInProgress } from '../auth/AuthInProgress.js';
-import { QwenOAuthProgress } from './QwenOAuthProgress.js';
-import { AuthDialog } from '../auth/AuthDialog.js';
 import { EditorSettingsDialog } from './EditorSettingsDialog.js';
 import { WorkspaceMigrationDialog } from './WorkspaceMigrationDialog.js';
 import { ProQuotaDialog } from './ProQuotaDialog.js';
@@ -190,40 +187,7 @@ export const DialogManager = ({
   if (uiState.isVisionSwitchDialogOpen) {
     return <ModelSwitchDialog onSelect={uiActions.handleVisionSwitchSelect} />;
   }
-  if (uiState.isAuthenticating) {
-    // Show Qwen OAuth progress if it's Qwen auth and OAuth is active
-    if (uiState.isQwenAuth && uiState.isQwenAuthenticating) {
-      return (
-        <QwenOAuthProgress
-          deviceAuth={uiState.deviceAuth || undefined}
-          authStatus={uiState.authStatus}
-          authMessage={uiState.authMessage}
-          onTimeout={uiActions.handleQwenAuthTimeout}
-          onCancel={uiActions.handleQwenAuthCancel}
-        />
-      );
-    }
-
-    // Default auth progress for other auth types
-    return (
-      <AuthInProgress
-        onTimeout={() => {
-          uiActions.onAuthError('Authentication cancelled.');
-        }}
-      />
-    );
-  }
-  if (uiState.isAuthDialogOpen) {
-    return (
-      <Box flexDirection="column">
-        <AuthDialog
-          onSelect={uiActions.handleAuthSelect}
-          settings={settings}
-          initialErrorMessage={uiState.authError}
-        />
-      </Box>
-    );
-  }
+  // Authentication dialogs removed - using local providers only
   if (uiState.isEditorDialogOpen) {
     return (
       <Box flexDirection="column">
